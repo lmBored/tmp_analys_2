@@ -1,0 +1,124 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{geometry}
+
+\geometry{margin=1in}
+
+\theoremstyle{definition}
+\newtheorem{exercise}{Exercise}
+\theoremstyle{plain}
+\newtheorem*{lemma}{Lemma}
+\newtheorem*{theorem}{Theorem}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+
+
+\begin{document}
+
+\title{Assignment 3}
+\date{}
+\maketitle
+
+\begin{exercise}[18.5.5]
+\end{exercise}
+
+\noindent We need to show that $\|f((-\pi, 0)) - f((\pi, 0))\|_W \le 14\sqrt{2}\pi$.\\
+Because the straight line between $(-\pi, 0)$ and $(\pi, 0)$ does not stay entirely within $\Omega$, we cannot apply the Mean-Value Inequality directly. Instead, we will construct a sequence of points along the curve $x_2 = \sin(x_1)$ and sum the segments.\\
+
+\noindent Choose $N := 32$. \\
+Indeed, $N \in \mathbb{N}$ and $N > 10\pi$. \\
+Define $\Delta t := \frac{2\pi}{N}$. \\
+For $k \in \{0, \dots, N\}$, define $t_k := -\pi + k \Delta t$. \\
+For $k \in \{0, \dots, N\}$, define $p_k := (t_k, \sin(t_k))$. \\
+Notice that $p_0 = (-\pi, 0)$ and $p_N = (\pi, 0)$. \\
+
+\noindent We first claim that for all $k \in \{0, \dots, N-1\}$, the straight line segment between $p_k$ and $p_{k+1}$ lies entirely in $\Omega$. \\
+Let $k \in \{0, \dots, N-1\}$.\\
+Let $\tau \in (0,1)$.\\
+Define $(x_1, x_2) := (1-\tau)p_k + \tau p_{k+1}$.\\
+Then $x_1 = (1-\tau)t_k + \tau t_{k+1} = t_k + \tau \Delta t$.\\
+And $x_2 = (1-\tau)\sin(t_k) + \tau \sin(t_{k+1})$.\\
+We need to show that $(x_1, x_2) \in \Omega$, which means we need to show that $|\sin(x_1) - x_2| < \frac{1}{10}$.\\
+We have
+$|\sin(x_1) - x_2| = |\sin(t_k + \tau \Delta t) - (1-\tau)\sin(t_k) - \tau \sin(t_{k+1})|$
+$= |(1-\tau)(\sin(t_k + \tau \Delta t) - \sin(t_k)) + \tau(\sin(t_k + \tau \Delta t) - \sin(t_{k+1}))|$\\
+By the triangle inequality, it holds that
+$|\sin(x_1) - x_2| \le (1-\tau)|\sin(t_k + \tau \Delta t) - \sin(t_k)| + \tau|\sin(t_k + \tau \Delta t) - \sin(t_{k+1})|$.\\
+By the Mean-Value Theorem for functions of one variable, we know that for all $a,b \in \mathbb{R}$, $|\sin(a) - \sin(b)| \le |a - b|$.\\
+Therefore, $|\sin(t_k + \tau \Delta t) - \sin(t_k)| \le \tau \Delta t$ and $|\sin(t_k + \tau \Delta t) - \sin(t_{k+1})| = |\tau \Delta t - \Delta t| = (1-\tau)\Delta t$. \\
+It follows that $|\sin(x_1) - x_2| \le (1-\tau)(\tau \Delta t) + \tau(1-\tau)\Delta t = 2\tau(1-\tau)\Delta t$.\\
+Since $\tau \in (0,1)$, it holds that $2\tau(1-\tau) \le \frac{1}{2}$.\\
+Thus, $|\sin(x_1) - x_2| \le \frac{1}{2}\Delta t = \frac{\pi}{32}$. \\
+Because $32 > 10\pi$, it holds that $\frac{\pi}{32} < \frac{1}{10}$. \\
+We conclude that $(x_1, x_2) \in \Omega$. This concludes the proof of the claim.\\
+
+\noindent We now apply Corollary 18.2.1 (Mean-value inequality) to the function $f$ on the points $p_k$ and $p_{k+1}$. Let $k \in \{0, \dots, N-1\}$. Since $f$ is differentiable on the open domain $\Omega$, and the line segment between $p_k$ and $p_{k+1}$ lies in $\Omega$, we check the conditions of the theorem and find that:\\
+$$\|f(p_{k+1}) - f(p_k)\|_W \le \sup_{\tau \in (0,1)} \|(Df)_{(1-\tau)p_k + \tau p_{k+1}}\|_{\mathbb{R}^2 \to W} \|p_{k+1} - p_k\|_2$$
+
+\noindent By assumption, for all $a \in \Omega$, $\|(Df)_a\|_{\mathbb{R}^2 \to W} \le 7$.\\
+Therefore, the supremum is bounded by $7$.\\
+Moreover, $\|p_{k+1} - p_k\|_2 = \|\left(\Delta t, \sin(t_{k+1}) - \sin(t_k)\right)\|_2$.\\
+Since $|\sin(t_{k+1}) - \sin(t_k)| \le \Delta t$, we have $\|p_{k+1} - p_k\|_2 \le \sqrt{(\Delta t)^2 + (\Delta t)^2} = \sqrt{2}\Delta t$.\\
+It follows that $\|f(p_{k+1}) - f(p_k)\|_W \le 7\sqrt{2}\Delta t$.\\
+
+\noindent We now use the triangle inequality to chain the segments together. It holds that
+$$\|f(p_N) - f(p_0)\|_W \le \sum_{k=0}^{N-1} \|f(p_{k+1}) - f(p_k)\|_W$$\\
+By substitution, we find:
+$$\|f(p_N) - f(p_0)\|_W \le \sum_{k=0}^{N-1} 7\sqrt{2}\Delta t = N \left(7\sqrt{2} \Delta t\right)$$\\
+Since $\Delta t = \frac{2\pi}{N}$, it holds that $N \Delta t = 2\pi$.\\
+Thus, $\|f(p_N) - f(p_0)\|_W \le 7\sqrt{2}(2\pi) = 14\sqrt{2}\pi$.\\
+Because $p_0 = (-\pi, 0)$ and $p_N = (\pi, 0)$, we conclude that:
+$$\|f((\pi, 0)) - f((-\pi, 0))\|_W \le 14\sqrt{2}\pi$$\\
+This concludes the proof.
+
+\begin{exercise}[19.9.4]
+\end{exercise}
+
+\noindent We need to write the expression $(D^3f)_a(y_1 e_1 + y_2 e_2, y_1 e_1 + y_2 e_2, y_1 e_1 + y_2 e_2)$ as a polynomial in $y$.\\
+Define $S := (D^3f)_a$.\\
+By Definition 19.8.1, $S \in \text{Sym}_3(\mathbb{R}^2, \mathbb{R})$, which means $S$ is a 3-linear, symmetric map.\\
+By the relationship between repeated partial derivatives and $n$-fold directional derivatives, evaluating $S$ on the standard basis vectors $e_1, e_2$ corresponds to the partial derivatives. Thus, we have:
+$$S(e_1, e_1, e_1) = \frac{\partial^3 f}{\partial x_1^3}(a) = 2$$
+$$S(e_1, e_1, e_2) = \frac{\partial^3 f}{\partial x_1^2 \partial x_2}(a) = 3$$\\
+By the symmetry of $S$, it holds that $S(e_1, e_2, e_1) = S(e_2, e_1, e_1) = S(e_1, e_1, e_2) = 3$.\\
+Let $y \in \mathbb{R}^2$. Then $y = y_1e_1 + y_2e_2$.\\
+By the 3-linearity and symmetry of $S$, we can expand $S(y, y, y)$ as:\\
+$$S(y_1e_1 + y_2e_2, y_1e_1 + y_2e_2, y_1e_1 + y_2e_2)$$
+$$= y_1^3 S(e_1, e_1, e_1) + 3y_1^2 y_2 S(e_1, e_1, e_2) + 3y_1 y_2^2 S(e_1, e_2, e_2) + y_2^3 S(e_2, e_2, e_2)$$\\
+Substitute the known values for $S(e_1, e_1, e_1)$ and $S(e_1, e_1, e_2)$ to obtain:
+$$S(y, y, y) = 2y_1^3 + 9y_1^2 y_2 + 3y_1 y_2^2 S(e_1, e_2, e_2) + y_2^3 S(e_2, e_2, e_2)$$\\
+Define $A := S(e_1, e_2, e_2)$ and $B := S(e_2, e_2, e_2)$.\\
+Then $S(y, y, y) = 2y_1^3 + 9y_1^2 y_2 + 3A y_1 y_2^2 + B y_2^3$.\\
+We use the two remaining pieces of given information to find $A$ and $B$.\\
+Use $y_1 := 1$ and $y_2 := 1$ in the expansion. \\
+Indeed, $y_1e_1 + y_2e_2 = e_1 + e_2$.\\
+Then $S(e_1+e_2, e_1+e_2, e_1+e_2) = 2(1)^3 + 9(1)^2(1) + 3A(1)(1)^2 + B(1)^3 = 11 + 3A + B$.\\
+Since we are given that $S(e_1+e_2, e_1+e_2, e_1+e_2) = 5$, it holds that $11 + 3A + B = 5$.\\
+This implies $3A + B = -6$.\\
+
+\noindent Use $y_1 := 1$ and $y_2 := -1$ in the expansion. \\
+Indeed, $y_1e_1 + y_2e_2 = e_1 - e_2$.\\
+Then $S(e_1-e_2, e_1-e_2, e_1-e_2) = 2(1)^3 + 9(1)^2(-1) + 3A(1)(-1)^2 + B(-1)^3 = -7 + 3A - B$.\\
+Since we are given that $S(e_1-e_2, e_1-e_2, e_1-e_2) = 8$, it holds that $-7 + 3A - B = 8$.\\
+This implies $3A - B = 15$.\\
+
+We now sum the two equations:
+$$(3A + B) + (3A - B) = -6 + 15$$\\
+It follows that $6A = 9$, which yields $A = \frac{3}{2}$.\\
+We subtract the second equation from the first:\\
+$$(3A + B) - (3A - B) = -6 - 15$$\\
+It follows that $2B = -21$, which yields $B = -\frac{21}{2}$.
+
+\noindent Substitute the values of $A$ and $B$ back into the expansion.\\
+We conclude that:
+$$(D^3f)_a(y_1e_1 + y_2e_2, y_1e_1 + y_2e_2, y_1e_1 + y_2e_2) = 2y_1^3 + 9y_1^2y_2 + \frac{9}{2}y_1y_2^2 - \frac{21}{2}y_2^3$$
+This concludes the proof.
+
+\end{document}
