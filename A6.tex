@@ -1,0 +1,102 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{parskip}
+
+\geometry{margin=1in}
+
+\theoremstyle{definition}
+\newtheorem{exercise}{Exercise}
+\theoremstyle{plain}
+\newtheorem*{lemma}{Lemma}
+\newtheorem*{theorem}{Theorem}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+
+
+\begin{document}
+
+\title{Assignment 6}
+\date{}
+\maketitle
+
+\begin{exercise}[28.5.2]
+Let $K$ be the following subset of $\mathbb{R}^3$
+\[ K := \{ (x,y,z) \in \mathbb{R}^3 \mid 0 \le z \le 1, x^2 + y^2 < z \} \]
+Determine
+\[ \int_K \exp(-(x^2 + y^2)) dxdydz. \]
+\end{exercise}
+
+\begin{proof}
+We are given the subset $K \subset \mathbb{R}^3$ and the function $f(x,y,z) := \exp(-(x^2 + y^2))$. We need to determine the integral of $f$ over $K$.
+
+We claim that:
+\[ \int_K \exp(-(x^2 + y^2)) dxdydz = \frac{\pi}{e}. \]
+
+We will compute this integral using the change of variables to cylindrical coordinates, following the definitions in Section 28.3. 
+Let $\Phi_{\text{cyl}} : (0, \infty) \times (0, 2\pi) \times \mathbb{R} \to \mathbb{R}^3$ be defined by
+\[ \Phi_{\text{cyl}}(r, \phi, z) := (r \cos \phi, r \sin \phi, z). \]
+We know from Section 28.3 that $\det [D\Phi_{\text{cyl}}]_{(r,\phi,z)} = r$.
+
+Let $E \subset (0, \infty) \times (0, 2\pi) \times \mathbb{R}$ be defined by:
+\[ E := \{ (r, \phi, z) \in (0, \infty) \times (0, 2\pi) \times \mathbb{R} \mid 0 < z < 1, r < \sqrt{z} \}. \]
+Note that $E$ is a Jordan set. The set $\Phi_{\text{cyl}}(E)$ differs from the integration domain $K$ only by a set of Jordan content zero (specifically, the subsets where the angle $\phi=0$, the radius $r=0$, or the boundary boundaries $z=0$, $z=1$, $r=\sqrt{z}$). Because this boundary has Jordan content zero, the integral over $K$ is equal to the integral over $\Phi_{\text{cyl}}(E)$.
+
+The function $f$ is continuous, and therefore bounded and Riemann integrable on the bounded Jordan set $K$. By the change of variables theorem for cylindrical coordinates, it holds that:
+\[ \int_{\Phi_{\text{cyl}}(E)} f(x,y,z) dxdydz = \int_E f(\Phi_{\text{cyl}}(r, \phi, z)) r d(r,\phi,z). \]
+We substitute $\Phi_{\text{cyl}}(r, \phi, z)$ into $f$ to obtain:
+\[ f(\Phi_{\text{cyl}}(r, \phi, z)) = \exp(-((r \cos \phi)^2 + (r \sin \phi)^2)) = \exp(-r^2). \]
+Therefore, it suffices to find:
+\[ \int_E r \exp(-r^2) d(r,\phi,z). \]
+
+To evaluate this integral over the Jordan set $E$, we invoke Definition 27.8.1 (Integration over bounded subsets) and Fubini's Theorem (Theorem 27.5.1). We place $E$ inside the closed rectangle $R := [0, 1] \times [0, 2\pi] \times [0, 1]$. We define the function $g_E : R \to \mathbb{R}$ by:
+\[ g_E(r, \phi, z) := \begin{cases} 
+r \exp(-r^2) & \text{if } (r, \phi, z) \in E, \\ 
+0 & \text{if } (r, \phi, z) \notin E.
+\end{cases} \]
+
+By Definition 27.8.1, the integral over $E$ equals the integral of $g_E$ over $R$. Applying Fubini's Theorem twice on the rectangle $R$, we can write this as iterated one-dimensional integrals:
+\[ \int_E r \exp(-r^2) d(r,\phi,z) = \int_0^1 \left( \int_0^{2\pi} \left( \int_0^1 g_E(r, \phi, z) dr \right) d\phi \right) dz. \]
+
+We evaluate the innermost integral first. Let $z \in (0, 1)$ and $\phi \in (0, 2\pi)$ be fixed. Then $g_E(r, \phi, z) = r \exp(-r^2)$ for $r \in [0, \sqrt{z}]$, and $g_E(r, \phi, z) = 0$ for $r \in (\sqrt{z}, 1]$. 
+
+By the restriction property of the Riemann integral (Proposition 26.2.3.iii), we can split the interval:
+\[ \int_0^1 g_E(r, \phi, z) dr = \int_0^{\sqrt{z}} r \exp(-r^2) dr + \int_{\sqrt{z}}^1 0 dr = \int_0^{\sqrt{z}} r \exp(-r^2) dr. \]
+
+To compute this, we note that the function $G_1(r) := -\frac{1}{2} \exp(-r^2)$ is an anti-derivative of $r \exp(-r^2)$. 
+By the Fundamental Theorem of Calculus:
+\begin{align*}
+\int_0^{\sqrt{z}} r \exp(-r^2) dr &= G_1(\sqrt{z}) - G_1(0) \\
+&= -\frac{1}{2}\exp(-z) - \left(-\frac{1}{2}\exp(0)\right) \\
+&= \frac{1}{2}(1 - \exp(-z)).
+\end{align*}
+
+Next, we evaluate the integral over $\phi$. For a fixed $z$, the result of the previous step is independent of $\phi$. The function $G_2(\phi) := \frac{1}{2}(1 - \exp(-z))\phi$ is an anti-derivative of the constant function $\frac{1}{2}(1 - \exp(-z))$ with respect to $\phi$. 
+Again, by the Fundamental Theorem of Calculus:
+\begin{align*} 
+\int_0^{2\pi} \frac{1}{2}(1 - \exp(-z)) d\phi &= G_2(2\pi) - G_2(0) \\
+&= \frac{1}{2}(1 - \exp(-z))(2\pi) - 0 \\
+&= \pi(1 - \exp(-z)). 
+\end{align*}
+
+Finally, we evaluate the integral over $z$ on $[0, 1]$. The function $G_3(z) := \pi(z + \exp(-z))$ is an anti-derivative of $\pi(1 - \exp(-z))$. 
+By the Fundamental Theorem of Calculus, we compute:
+\begin{align*}
+\int_0^1 \pi(1 - \exp(-z)) dz &= G_3(1) - G_3(0) \\
+&= \pi(1 + \exp(-1)) - \pi(0 + \exp(0)) \\
+&= \pi(1 + e^{-1}) - \pi(1) \\
+&= \frac{\pi}{e}.
+\end{align*}
+
+We conclude that:
+\[ \int_K \exp(-(x^2 + y^2)) dxdydz = \frac{\pi}{e}. \]
+\end{proof}
+
+\end{document}
